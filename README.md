@@ -15,3 +15,7 @@ No settings yet, a setting for Unicode (various styles) vs ASCII is being worked
 ## Release Notes
 
 See the [changelog](CHANGELOG.md).
+
+## Contributing
+
+See [todo](todo).
