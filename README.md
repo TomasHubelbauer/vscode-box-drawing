@@ -1,5 +1,7 @@
 # Box Drawing
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/TomasHubelbauer/vscode-box-drawing.svg)](https://greenkeeper.io/)
+
 > A VS Code extension for simplifying box drawing with Unicode and ASCII.
 
 This extension only works on MarkDown files!
