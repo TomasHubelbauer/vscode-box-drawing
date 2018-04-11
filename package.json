@@ -1,8 +1,8 @@
 {
     "name": "vscode-box-drawing",
-    "displayName": "VSCode Box Drawing (ASCII, Unicode)",
+    "displayName": "Box Drawing (ASCII, Unicode)",
     "description": "Drawing boxes using ASCII or Unicode box drawing characters by using the mouse support in Visual Studio Code",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "publisher": "TomasHubelbauer",
     "repository": {
         "type" : "git",

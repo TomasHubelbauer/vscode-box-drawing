@@ -10,7 +10,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Support for drawing arrows
 - Keyboard shortcut
 
-## 1.0.0
+## `2.0.0` (2017-04-11)
+
+Drop the *VSCode* prefix.
+
+## `1.0.0` (2017-04-04)
 
 - Initial release
 - The *Draw a box* command which uses Unicode box drawing characters
+
+## Publishing
+
+[`vsce publish`](https://code.visualstudio.com/docs/extensions/publish-extension)
