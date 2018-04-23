@@ -4,6 +4,10 @@
 
 This extension only works on MarkDown files!
 
+Unfortunately, due to VS Code API limitations, direct mouse drawing mode cannot be used and instead selections have to be utilized.
+
+To alleviate the pain of using this mode, we'll soon bring in a command which pre-spaces a page of the document to make making selections convenient.
+
 ## Features
 
 ![Screenshot](screenshot.gif)
