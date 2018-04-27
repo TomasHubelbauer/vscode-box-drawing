@@ -1,5 +1,5 @@
 # Box Drawing
-![Installs](https://vsmarketplacebadge.apphb.com/installs-short/TomasHubelbauer.vscode-markdown-link-suggestions.svg)
+![Installs](https://vsmarketplacebadge.apphb.com/installs-short/TomasHubelbauer.vscode-box-drawing.svg)
 
 > A VS Code extension for simplifying box drawing with Unicode and ASCII.
 
