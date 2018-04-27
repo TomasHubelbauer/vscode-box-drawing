@@ -23,3 +23,5 @@ See the [changelog](CHANGELOG.md).
 ## Contributing
 
 See [todo](todo).
+
+[In the Marketplace](https://marketplace.visualstudio.com/items?itemName=TomasHubelbauer.vscode-box-drawing)
