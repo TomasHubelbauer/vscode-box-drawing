@@ -1,5 +1,5 @@
 'use strict';
-import { ExtensionContext, commands, window, EndOfLine, TextEditor } from 'vscode';
+import { ExtensionContext, commands, window, EndOfLine, Position } from 'vscode';
 
 export function activate(context: ExtensionContext) {
     console.log('Activated');
@@ -13,7 +13,11 @@ export function activate(context: ExtensionContext) {
 
         editor.edit((editBuilder) => {
             console.log('Obtained edit builder');
-            const { replacementText, boxWidth, boxHeight } = algo(editor);
+            const { start: startPosition, end: endPosition } = editor.selection;
+            const { eol, getText, offsetAt } = editor.document;
+            const startOffset = offsetAt(startPosition);
+            const endOffset = offsetAt(endPosition);
+            const { replacementText, boxWidth, boxHeight } = algo(startPosition, endPosition, eol, getText(), startOffset, endOffset);
             editBuilder.replace(editor.selection, replacementText);
             console.log(`Drawn a ${boxWidth}×${boxHeight} box`);
         });
@@ -24,10 +28,9 @@ export function deactivate() {
     console.log('Deactivated');
 }
 
-// This is copied over from algo.js:
-function algo(editor: TextEditor) {
-    const { character: startCharacter, line: startLine } = editor.selection.start;
-    const { character: endCharacter, line: endLine } = editor.selection.end;
+export function algo(startPosition: Position, endPosition: Position, eol: EndOfLine, text: string, startOffset: number, endOffset: number) {
+    const { character: startCharacter, line: startLine } = startPosition;
+    const { character: endCharacter, line: endLine } = endPosition;
 
     const minCharacter = Math.min(startCharacter, endCharacter);
     const maxCharacter = Math.max(startCharacter, endCharacter);
@@ -38,15 +41,13 @@ function algo(editor: TextEditor) {
     const boxHeight = maxLine - minLine + 1;
 
     let eolText = '';
-    switch (editor.document.eol) {
+    switch (eol) {
         case EndOfLine.LF: eolText = '\n'; break;
         case EndOfLine.CRLF: eolText = '\r\n'; break;
         default: throw new Error('Unexpected EOL value.');
     }
 
-    const selectionText = editor.document.getText().substring(
-        editor.document.offsetAt(editor.selection.start),
-        editor.document.offsetAt(editor.selection.end));
+    const selectionText = text.substring(startOffset, endOffset);
 
     let replacementText = '';
 
