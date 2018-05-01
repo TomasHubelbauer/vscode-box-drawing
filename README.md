@@ -25,4 +25,6 @@ See the [changelog](CHANGELOG.md).
 
 See [todo](todo).
 
+Run `npm run test` after making your changes to ensure no regressions have been introduced.
+
 [In the Marketplace](https://marketplace.visualstudio.com/items?itemName=TomasHubelbauer.vscode-box-drawing)
