@@ -1,4 +1,4 @@
-# Box Drawing
+# [Box Drawing](https://marketplace.visualstudio.com/items?itemName=TomasHubelbauer.vscode-box-drawing)
 ![Installs](https://vsmarketplacebadge.apphb.com/installs-short/TomasHubelbauer.vscode-box-drawing.svg)
 ![Build](https://api.travis-ci.org/TomasHubelbauer/vscode-box-drawing.svg?branch=master)
 
@@ -27,5 +27,3 @@ See the [changelog](CHANGELOG.md).
 See [todo](todo).
 
 Run `npm run test` after making your changes to ensure no regressions have been introduced.
-
-[In the Marketplace](https://marketplace.visualstudio.com/items?itemName=TomasHubelbauer.vscode-box-drawing)
