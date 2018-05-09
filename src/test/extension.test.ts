@@ -8,22 +8,22 @@ import { EndOfLine, Position } from 'vscode';
 import { algo } from '../extension';
 
 suite("Extension Tests", function () {
-    test("Case 1", function() {
+    test("Case 1", function () {
         runTest(EndOfLine.LF,
-`a b c d e f g
+            `a b c d e f g
 h i j k l
 m n o p q r s t
 u v w x y z`,
-new Position(1, 2), new Position(3, 6),
-`a b c d e f g
+            new Position(1, 2), new Position(3, 6),
+            `a b c d e f g
 h ┏━━┓k l
 m ┃ o┃p q r s t
 u ┗━━┛x y z`);
     });
 
-    test("Case 2", function() {
+    test("Case 2", function () {
         runTest(EndOfLine.LF,
-`
+            `
 abcdefghijklmnopqrstuvwxyz
 abcdefghijklmnopqrstuvwxyz
 abcde
@@ -32,8 +32,8 @@ abcde
 abcdefghijklmnopqrstuvwxyz
 abcdefghijklmnopqrstuvwxyz
 `,
-new Position(1, 2), new Position(6, 21),
-`
+            new Position(1, 2), new Position(6, 21),
+            `
 ab┏━━━━━━━━━━━━━━━━━┓vwxyz
 ab┃defghijklmnopqrst┃vwxyz
 ab┃de               ┃
@@ -44,9 +44,9 @@ abcdefghijklmnopqrstuvwxyz
 `);
     });
 
-test("Case 3", function() {
-    runTest(EndOfLine.LF,
-`
+    test("Case 3", function () {
+        runTest(EndOfLine.LF,
+            `
 abcde
 abcdefghijklmnopqrstuvwxyz
 abcdefghijklmnopqrstuvwxyz
@@ -55,8 +55,8 @@ abcdefghijklmnopqrstuvwxyz
 abcde
 end
 `,
-new Position(1, 2), new Position(6, 21),
-`
+            new Position(1, 2), new Position(6, 21),
+            `
 ab┏━━━━━━━━━━━━━━━━━┓
 ab┃defghijklmnopqrst┃vwxyz
 ab┃defghijklmnopqrst┃vwxyz
@@ -67,9 +67,9 @@ end
 `);
     });
 
-    test("Case 4", function() {
+    test("Case 4", function () {
         runTest(EndOfLine.LF,
-`
+            `
 abcdefghi
 1
 2bcdefghi
@@ -77,8 +77,8 @@ abcdefghi
 4
 abcdefghi
 `,
-new Position(1, 1), new Position(6, 6),
-`
+            new Position(1, 1), new Position(6, 6),
+            `
 a┏━━━┓ghi
 1┃   ┃
 2┃cde┃ghi
@@ -110,7 +110,7 @@ function offsetAt(eol: EndOfLine, text: string, position: Position) {
 function runTest(eol: EndOfLine, text: string, startPosition: Position, endPosition: Position, expectedText: string) {
     const startOffset = offsetAt(eol, text, startPosition);
     const endOffset = offsetAt(eol, text, endPosition);
-    const { replacementText } = algo(startPosition, endPosition, eol, text, startOffset, endOffset);
+    const { replacementText } = algo(startPosition, endPosition, eol, text, startOffset, endOffset, 'unicode');
     const actualText = text.substring(0, startOffset) + replacementText + text.substring(endOffset);
     assert.equal(actualText, expectedText);
 }

@@ -1,5 +1,5 @@
 'use strict';
-import { ExtensionContext, commands, window, EndOfLine, Position } from 'vscode';
+import { ExtensionContext, commands, window, EndOfLine, Position, workspace } from 'vscode';
 
 export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerTextEditorCommand('extension.drawBox', (textEditor, edit) => {
@@ -12,7 +12,8 @@ export function activate(context: ExtensionContext) {
         const { eol, getText, offsetAt } = textEditor.document;
         const startOffset = offsetAt(startPosition);
         const endOffset = offsetAt(endPosition);
-        const { replacementText } = algo(startPosition, endPosition, eol, getText(), startOffset, endOffset);
+        const { style } = workspace.getConfiguration('boxDrawing');
+        const { replacementText } = algo(startPosition, endPosition, eol, getText(), startOffset, endOffset, style);
         edit.replace(textEditor.selection, replacementText);
     }));
 
@@ -31,7 +32,7 @@ export function deactivate() {
 
 }
 
-export function algo(startPosition: Position, endPosition: Position, eol: EndOfLine, text: string, startOffset: number, endOffset: number) {
+export function algo(startPosition: Position, endPosition: Position, eol: EndOfLine, text: string, startOffset: number, endOffset: number, style: 'ascii' | 'unicode') {
     const { character: startCharacter, line: startLine } = startPosition;
     const { character: endCharacter, line: endLine } = endPosition;
 

@@ -53,7 +53,21 @@
                 "mac": "cmd+i cmd+c",
                 "when": "resourceLangId == markdown"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "MarkDown Box Drawing",
+            "properties": {
+                "boxDrawing.style": {
+                    "type": "string",
+                    "enum": [
+                        "ascii",
+                        "unicode"
+                    ],
+                    "default": "unicode"
+                }
+            }
+        }
     },
     "main": "./out/extension",
     "scripts": {
