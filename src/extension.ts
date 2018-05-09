@@ -15,6 +15,16 @@ export function activate(context: ExtensionContext) {
         const { replacementText } = algo(startPosition, endPosition, eol, getText(), startOffset, endOffset);
         edit.replace(textEditor.selection, replacementText);
     }));
+
+    context.subscriptions.push(commands.registerTextEditorCommand('extension.insertCanvas', (textEditor, edit) => {
+        if (textEditor.document.languageId !== 'markdown') {
+            window.showErrorMessage('Must be a MarkDown editor!');
+            return;
+        }
+
+        // TODO: https://github.com/Microsoft/vscode/issues/14756
+        edit.replace(textEditor.selection, `\n${Array(30).fill(' '.repeat(90)).join('\n')}\n`);
+    }));
 }
 
 export function deactivate() {

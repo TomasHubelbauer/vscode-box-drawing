@@ -20,8 +20,12 @@
     "contributes": {
         "commands": [
             {
-                "title": "Draw a box",
+                "title": "Draw a box enclosing selection",
                 "command": "extension.drawBox"
+            },
+            {
+                "title": "Insert a drawing canvas",
+                "command": "extension.insertCanvas"
             }
         ],
         "menus": {
@@ -29,9 +33,27 @@
                 {
                     "command": "extension.drawBox",
                     "when": "resourceLangId == markdown"
+                },
+                {
+                    "command": "extension.insertCanvas",
+                    "when": "resourceLangId == markdown"
                 }
             ]
-        }
+        },
+        "keybindings": [
+            {
+                "command": "extension.drawBox",
+                "key": "ctrl+d ctrl+b",
+                "mac": "cmd+d cmd+b",
+                "when": "resourceLangId == markdown"
+            },
+            {
+                "command": "extension.insertCanvas",
+                "key": "ctrl+i ctrl+c",
+                "mac": "cmd+i cmd+c",
+                "when": "resourceLangId == markdown"
+            }
+        ]
     },
     "main": "./out/extension",
     "scripts": {
