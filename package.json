@@ -24,6 +24,10 @@
                 "command": "extension.drawBox"
             },
             {
+                "title": "Draw an arrow between selection start and end",
+                "command": "extension.drawArrow"
+            },
+            {
                 "title": "Insert a drawing canvas",
                 "command": "extension.insertCanvas"
             }
@@ -32,6 +36,10 @@
             "editor/context": [
                 {
                     "command": "extension.drawBox",
+                    "when": "resourceLangId == markdown"
+                },
+                {
+                    "command": "extension.drawArrow",
                     "when": "resourceLangId == markdown"
                 },
                 {
@@ -51,6 +59,12 @@
                 "command": "extension.insertCanvas",
                 "key": "ctrl+i ctrl+c",
                 "mac": "cmd+i cmd+c",
+                "when": "resourceLangId == markdown"
+            },
+            {
+                "command": "extension.drawArrow",
+                "key": "ctrl+d ctrl+a",
+                "mac": "cmd+d cmd+a",
                 "when": "resourceLangId == markdown"
             }
         ],

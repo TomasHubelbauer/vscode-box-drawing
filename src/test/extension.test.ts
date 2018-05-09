@@ -5,7 +5,7 @@
 
 import * as assert from 'assert';
 import { EndOfLine, Position } from 'vscode';
-import { algo } from '../extension';
+import { drawBox } from '../extension';
 
 suite("Extension Tests", function () {
     test("Case 1", function () {
@@ -110,7 +110,7 @@ function offsetAt(eol: EndOfLine, text: string, position: Position) {
 function runTest(eol: EndOfLine, text: string, startPosition: Position, endPosition: Position, expectedText: string) {
     const startOffset = offsetAt(eol, text, startPosition);
     const endOffset = offsetAt(eol, text, endPosition);
-    const { replacementText } = algo(startPosition, endPosition, eol, text, startOffset, endOffset, 'unicode');
+    const { replacementText } = drawBox(startPosition, endPosition, eol, text, startOffset, endOffset, 'unicode');
     const actualText = text.substring(0, startOffset) + replacementText + text.substring(endOffset);
     assert.equal(actualText, expectedText);
 }

@@ -1,5 +1,5 @@
 'use strict';
-import { ExtensionContext, commands, window, EndOfLine, Position, workspace } from 'vscode';
+import { ExtensionContext, commands, window, EndOfLine, Position, workspace, TextEditorEdit, Range } from 'vscode';
 
 export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerTextEditorCommand('extension.drawBox', (textEditor, edit) => {
@@ -13,7 +13,7 @@ export function activate(context: ExtensionContext) {
         const startOffset = offsetAt(startPosition);
         const endOffset = offsetAt(endPosition);
         const { style } = workspace.getConfiguration('boxDrawing');
-        const { replacementText } = algo(startPosition, endPosition, eol, getText(), startOffset, endOffset, style);
+        const { replacementText } = drawBox(startPosition, endPosition, eol, getText(), startOffset, endOffset, style);
         edit.replace(textEditor.selection, replacementText);
     }));
 
@@ -24,15 +24,21 @@ export function activate(context: ExtensionContext) {
         }
 
         // TODO: https://github.com/Microsoft/vscode/issues/14756
-        edit.replace(textEditor.selection, `\n${Array(30).fill(' '.repeat(90)).join('\n')}\n`);
+        edit.replace(textEditor.selection, `\n${Array(30).fill(' '.repeat(120)).join('\n')}\n`);
+    }));
+
+    context.subscriptions.push(commands.registerTextEditorCommand('extension.drawArrow', (textEditor, edit) => {
+        if (textEditor.document.languageId !== 'markdown' || textEditor.selections.length !== 1) {
+            window.showErrorMessage('Must be a MarkDown editor with a sole selection!');
+            return;
+        }
+
+        const { start: startPosition, end: endPosition } = textEditor.selection;
+        drawArrow(startPosition, endPosition, edit);
     }));
 }
 
-export function deactivate() {
-
-}
-
-export function algo(startPosition: Position, endPosition: Position, eol: EndOfLine, text: string, startOffset: number, endOffset: number, style: 'ascii' | 'unicode') {
+export function drawBox(startPosition: Position, endPosition: Position, eol: EndOfLine, text: string, startOffset: number, endOffset: number, style: 'ascii' | 'unicode') {
     const { character: startCharacter, line: startLine } = startPosition;
     const { character: endCharacter, line: endLine } = endPosition;
 
@@ -103,4 +109,37 @@ export function algo(startPosition: Position, endPosition: Position, eol: EndOfL
     }
 
     return { replacementText, boxHeight, boxWidth };
+}
+
+// TODO: Rewrite this to work on text instead of incuring an edit for each pixel
+export function drawArrow(startPosition: Position, endPosition: Position, edit: TextEditorEdit) {
+    let { line: y0, character: x0 } = startPosition;
+    let { line: y1, character: x1 } = endPosition;
+
+    // https://stackoverflow.com/a/4672319/2715716
+    const dx = Math.abs(x1 - x0);
+    const dy = Math.abs(y1 - y0);
+    const sx = (x0 < x1) ? 1 : -1;
+    const sy = (y0 < y1) ? 1 : -1;
+    let err = dx - dy;
+    while (true) {
+        // TODO: Test edge cases where x0 + 1 might come bite our ass.
+        edit.replace(new Range(new Position(y0, x0), new Position(y0, x0 + 1)), '-');
+
+        if ((x0 === x1) && (y0 === y1)) {
+            break;
+        }
+
+        const e2 = 2 * err;
+
+        if (e2 > -dy) {
+            err -= dy;
+            x0 += sx;
+        }
+
+        if (e2 < dx) {
+            err += dx;
+            y0 += sy;
+        }
+    }
 }
