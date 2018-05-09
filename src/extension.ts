@@ -2,30 +2,23 @@
 import { ExtensionContext, commands, window, EndOfLine, Position } from 'vscode';
 
 export function activate(context: ExtensionContext) {
-    console.log('Activated');
-
-    context.subscriptions.push(commands.registerCommand('extension.drawBox', () => {
-        const editor = window.activeTextEditor;
-        if (editor === undefined || editor.document.languageId !== 'markdown' || editor.selections.length !== 1) {
+    context.subscriptions.push(commands.registerTextEditorCommand('extension.drawBox', (textEditor, edit) => {
+        if (textEditor.document.languageId !== 'markdown' || textEditor.selections.length !== 1) {
             window.showErrorMessage('Must be a MarkDown editor with a sole selection!');
             return;
         }
 
-        editor.edit((editBuilder) => {
-            console.log('Obtained edit builder');
-            const { start: startPosition, end: endPosition } = editor.selection;
-            const { eol, getText, offsetAt } = editor.document;
-            const startOffset = offsetAt(startPosition);
-            const endOffset = offsetAt(endPosition);
-            const { replacementText, boxWidth, boxHeight } = algo(startPosition, endPosition, eol, getText(), startOffset, endOffset);
-            editBuilder.replace(editor.selection, replacementText);
-            console.log(`Drawn a ${boxWidth}×${boxHeight} box`);
-        });
+        const { start: startPosition, end: endPosition } = textEditor.selection;
+        const { eol, getText, offsetAt } = textEditor.document;
+        const startOffset = offsetAt(startPosition);
+        const endOffset = offsetAt(endPosition);
+        const { replacementText } = algo(startPosition, endPosition, eol, getText(), startOffset, endOffset);
+        edit.replace(textEditor.selection, replacementText);
     }));
 }
 
 export function deactivate() {
-    console.log('Deactivated');
+
 }
 
 export function algo(startPosition: Position, endPosition: Position, eol: EndOfLine, text: string, startOffset: number, endOffset: number) {
@@ -61,7 +54,7 @@ export function algo(startPosition: Position, endPosition: Position, eol: EndOfL
     } else {
         replacementText += selectionText.substring(boxWidth, cursor); // Rest of line
     }
-    
+
     for (let line = 1; line < boxHeight; line++) {
         let leftOffset = cursor + minCharacter;
         let rightOffset = leftOffset + boxWidth;

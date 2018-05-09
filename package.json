@@ -1,12 +1,12 @@
 {
     "name": "vscode-box-drawing",
-    "displayName": "Box Drawing (ASCII, Unicode)",
+    "displayName": "MarkDown Box Drawing",
     "description": "Drawing boxes using ASCII or Unicode box drawing characters by using the mouse support in Visual Studio Code",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "publisher": "TomasHubelbauer",
     "repository": {
-        "type" : "git",
-        "url" : "https://github.com/TomasHubelbauer/vscode-box-drawing.git"
+        "type": "git",
+        "url": "https://github.com/TomasHubelbauer/vscode-box-drawing.git"
     },
     "engines": {
         "vscode": "^1.21.0"
@@ -23,7 +23,15 @@
                 "title": "Draw a box",
                 "command": "extension.drawBox"
             }
-        ]
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "extension.drawBox",
+                    "when": "resourceLangId == markdown"
+                }
+            ]
+        }
     },
     "main": "./out/extension",
     "scripts": {
