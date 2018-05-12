@@ -111,7 +111,6 @@ export function drawBox(startPosition: Position, endPosition: Position, eol: End
     return { replacementText, boxHeight, boxWidth };
 }
 
-// TODO: Rewrite this to work on text instead of incuring an edit for each pixel
 export function drawArrow(startPosition: Position, endPosition: Position, edit: TextEditorEdit) {
     let { line: y0, character: x0 } = startPosition;
     let { line: y1, character: x1 } = endPosition;
@@ -124,7 +123,7 @@ export function drawArrow(startPosition: Position, endPosition: Position, edit: 
     let err = dx - dy;
     while (true) {
         // TODO: Test edge cases where x0 + 1 might come bite our ass.
-        edit.replace(new Range(new Position(y0, x0), new Position(y0, x0 + 1)), '-');
+        edit.replace(new Range(new Position(y0, x0), new Position(y0, x0 + 1)), '·');
 
         if ((x0 === x1) && (y0 === y1)) {
             break;

@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Respect the `boxDrawing.style` configuration setting when drawing boxes
+- Use Unicode middle dot instead of a dash when drawing arrows
 
 ## `3.0.0` (2018-05-09)
 
