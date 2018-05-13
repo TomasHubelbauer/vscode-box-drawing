@@ -110,4 +110,30 @@ a┗━━━┛ghi
                 const actual = textDocument.getText();
                 assert.equal(actual, expected);
         });
+
+        test('Arrow 1', async function () {
+                const content = `
+abcdefghijklmnopqrstuvwxyz
+abcdefghijklmnopqrstuvwxyz
+abcdefghijklmnopqrstuvwxyz
+abcdefghijklmnopqrstuvwxyz
+abcdefghijklmnopqrstuvwxyz
+abcdefghijklmnopqrstuvwxyz
+`;
+                const expected = `
+a··defghijklmnopqrstuvwxyz
+abc····hijklmnopqrstuvwxyz
+abcdefg····lmnopqrstuvwxyz
+abcdefghijk····pqrstuvwxyz
+abcdefghijklmno····tuvwxyz
+abcdefghijklmnopqrs··vwxyz
+`;
+                const textDocument = await workspace.openTextDocument({ language: 'markdown', content });
+                const textEditor = await window.showTextDocument(textDocument);
+                textEditor.selection = new Selection(new Position(1, 1), new Position(6, 20));
+                await commands.executeCommand('extension.drawArrow');
+                await new Promise(resolve => setTimeout(resolve, 2)); // Prevent flaky test.
+                const actual = textDocument.getText();
+                assert.equal(actual, expected);
+        });
 });
