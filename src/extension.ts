@@ -60,13 +60,14 @@ export function drawBox(startPosition: Position, endPosition: Position, edit: Te
             }
         } else if (line.range.end.character < farCharacter) {
             // End line at the box for simple insertion
-            edit.delete(new Range(new Position(line.lineNumber, nearCharacter), line.range.end));
-            const position = line.range.end;
+            const deleteRange = new Range(new Position(line.lineNumber, nearCharacter), line.range.end);
+            edit.delete(deleteRange);
+            const insertPosition = line.range.end;
             if (line.lineNumber !== nearLine && line.lineNumber !== farLine) {
-                window.showInformationMessage((farCharacter - line.range.end.character).toString());
-                edit.insert(position, nearSymbol + line.text.substring(nearCharacter + 1) + ' '.repeat(farCharacter - line.range.end.character - 1) + farSymbol);
+                const text = line.text.substring(nearCharacter + 1);
+                edit.insert(insertPosition, nearSymbol + text + ' '.repeat(farCharacter - nearCharacter - text.length - 2) + farSymbol);
             } else {
-                edit.insert(position, nearSymbol + '━'.repeat(farCharacter - nearCharacter - 2) + farSymbol);
+                edit.insert(insertPosition, nearSymbol + '━'.repeat(farCharacter - nearCharacter - 2) + farSymbol);
             }
         } else {
             const range = new Range(new Position(line.lineNumber, nearCharacter), new Position(line.lineNumber, farCharacter));
