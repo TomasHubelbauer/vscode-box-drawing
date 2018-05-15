@@ -3,6 +3,11 @@
     "displayName": "MarkDown Box Drawing",
     "description": "Drawing boxes using ASCII or Unicode box drawing characters by using the mouse support in Visual Studio Code",
     "version": "3.0.1",
+    "license": "MIT",
+    "categories": [
+        "Programming Languages"
+    ],
+    "keywords": ["markdown", "box-drawing", "unicode"],
     "publisher": "TomasHubelbauer",
     "repository": {
         "type": "git",
