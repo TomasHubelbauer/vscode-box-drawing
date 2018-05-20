@@ -1,5 +1,5 @@
 'use strict';
-import { ExtensionContext, commands, window, Position, workspace, TextEditorEdit, Range, TextLine } from 'vscode';
+import { ExtensionContext, commands, window, Position, workspace, TextEditorEdit, Range, TextLine, TextEditorSelectionChangeKind } from 'vscode';
 
 export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerTextEditorCommand('extension.insertCanvas', (textEditor, edit) => {
@@ -32,6 +32,34 @@ export function activate(context: ExtensionContext) {
         const { start: startPosition, end: endPosition } = textEditor.selection;
         drawArrow(startPosition, endPosition, edit);
     }));
+
+    // This successfully extends the line as selection is drawn rightwards.
+    // TODO: Calculate selection expansion acceleration and add spaces according to that because currently it stops if you go too fast.
+    // TODO: Recognize drawing across to the next line and insert a new blank link and backfill the new line with spaces up until the character point and keep going.
+    window.onDidChangeTextEditorSelection(async event => {
+        if (event.kind === TextEditorSelectionChangeKind.Mouse && event.selections.length === 1) {
+            const selection = event.selections[0];
+            if (selection.isEmpty) {
+                // Stop when clicking away from the selection.
+                return;
+            }
+
+            const activeLine = event.textEditor.document.lineAt(selection.active);
+            if (!activeLine.isEmptyOrWhitespace) {
+                // Prevent drawing over to actual contents.
+                return;
+            }
+
+            if (selection.active.isEqual(activeLine.range.end)) {
+                // Bump the line when its end is hit with the cursor.
+                await event.textEditor.edit(editBuilder => {
+                    editBuilder.insert(selection.active, ' ');
+                });
+            }
+
+            console.log(selection.active.line, selection.active.character, activeLine.range.end.line, activeLine.range.end.character);
+        }
+    });
 }
 
 // TODO: Respect the switch for ASCII/Unicode
