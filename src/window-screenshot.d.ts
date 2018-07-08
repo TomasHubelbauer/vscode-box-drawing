@@ -1,1 +1,0 @@
-declare module 'window-screenshot';

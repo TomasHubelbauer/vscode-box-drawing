@@ -2,19 +2,9 @@
 # yarn lockfile v1
 
 
-"@types/fs-extra@^5.0.4":
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-5.0.4.tgz#b971134d162cc0497d221adde3dbb67502225599"
-  dependencies:
-    "@types/node" "*"
-
 "@types/mocha@^2.2.42":
   version "2.2.48"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.48.tgz#3523b126a0b049482e1c3c11877460f76622ffab"
-
-"@types/node@*":
-  version "10.5.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.2.tgz#f19f05314d5421fe37e74153254201a7bf00a707"
 
 "@types/node@^7.0.43":
   version "7.0.59"
@@ -1836,6 +1826,12 @@ vinyl@~2.0.1:
     is-stream "^1.1.0"
     remove-trailing-separator "^1.0.1"
     replace-ext "^1.0.0"
+
+"vscode-extension-test-screenshot-markdown-generator@file:../vscode-extension-demoGenerator":
+  version "1.0.0"
+  dependencies:
+    fs-extra "^6.0.1"
+    window-screenshot "https://github.com/TomasHubelbauer/window-screenshot"
 
 vscode@^1.1.6:
   version "1.1.14"

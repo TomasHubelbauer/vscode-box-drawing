@@ -11,6 +11,8 @@ To alleviate the pain of using this mode, we'll soon bring in a command which pr
 
 ## Features
 
+<!-- Generated from src/test/extension.test.ts -->
+
 ## Release Notes
 
 See the [change log](CHANGELOG.md).

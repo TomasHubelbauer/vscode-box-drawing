@@ -36,8 +36,6 @@ Execute the *Draw a box enclosing the selection* command. Here's your box!
 
 TODO
 
-
-
 ## Release Notes
 
 See the [change log](CHANGELOG.md).

@@ -5,52 +5,13 @@
 
 import * as assert from 'assert';
 import { workspace, window, Selection, Position, commands } from 'vscode';
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import * as windowScreenshot from 'window-screenshot';
+import Generator from 'vscode-extension-test-screenshot-markdown-generator';
 
-// The contents of demo/README.md which gets copied to README.md underneath the Features section
-const readmeFilePath = path.join(__dirname /* out/test */, '../../demo/README.md');
-fs.writeFile(readmeFilePath, `
-## Features
+suite("Extension Tests", async function () {
+        const generator = new Generator();
+        generator.appendHeading('Features');
+        generator.appendParagraph('The commands are shown only in MarkDown files. You can configure the extension to either use ASCII or Unicode drawing characters.');
 
-The commands are shown only in MarkDown files. You can configure the extension to either use ASCII or Unicode drawing characters.
-
-`);
-
-async function heading(title: string) {
-        await fs.appendFile(readmeFilePath, `### ${title}\n\n`);
-}
-
-async function paragraph(text: string) {
-        await fs.appendFile(readmeFilePath, text + '\n\n');
-}
-
-async function screenshot(title: string) {
-        return new Promise((resolve, reject) => {
-                windowScreenshot(
-                        0, // 0 is for active window
-                        async (error: Error, res: Buffer) => {
-                                if (error) {
-                                        reject(error);
-                                }
-
-                                try {
-                                        const screenshotFileName = title + '.png';
-                                        const screenshotFilePath = path.join(__dirname /* out/test */, '../../demo/', screenshotFileName);
-                                        const stream = fs.createWriteStream(screenshotFilePath);
-                                        stream.write(res);
-                                        stream.close();
-                                        await fs.appendFile(readmeFilePath, `![${title}](${screenshotFileName})\n\n`);
-                                        resolve();
-                                } catch (error) {
-                                        reject(error);
-                                }
-                        });
-        });
-}
-
-suite("Extension Tests", function () {
         test("Box 1", async function () {
                 const content = `
 a b c d e f g
@@ -182,12 +143,12 @@ abcdefghijklmnopqrs··vwxyz
         });
 
         test('Demo clearing the canvas', async function () {
-                await heading('Clearing the canvas');
-                await paragraph('TODO');
+                generator.appendSubheading('Clearing the canvas');
+                generator.appendParagraph('TODO');
         });
 
         test("Demo drawing a box", async function () {
-                await heading('Drawing a box');
+                generator.appendSubheading('Drawing a box');
                 const content = `
 a b c d e f g
 h i j k l
@@ -202,21 +163,23 @@ u ┗━━┛x y z
 `;
                 const textDocument = await workspace.openTextDocument({ language: 'markdown', content });
                 const textEditor = await window.showTextDocument(textDocument);
-                await paragraph('Start with a document formatted so that you can make a rectangular selection about the desired area. You can use the *Insert a drawing canvas* for this.');
-                await screenshot('box-canvas');
+                generator.appendParagraph('Start with a document formatted so that you can make a rectangular selection about the desired area. You can use the *Insert a drawing canvas* for this.');
+                await generator.appendScreenshot('box-canvas', 'Preformatted canvas');
+                generator.appendParagraph('Make your selection enclosing the area you want to draw the box around…');
                 textEditor.selection = new Selection(new Position(2, 2), new Position(4, 6));
-                await paragraph('Make your selection enclosing the area you want to draw the box around…');
-                await screenshot('box-selection');
+                await generator.appendScreenshot('box-selection', 'A selection whose start and end points make up a rectangle');
+                generator.appendParagraph('Execute the *Draw a box enclosing the selection* command. Here\'s your box!');
                 await commands.executeCommand('extension.drawBox');
                 await new Promise(resolve => setTimeout(resolve, 2)); // Prevent flaky test.
-                await paragraph('Execute the *Draw a box enclosing the selection* command. Here\'s your box!');
-                await screenshot('box-box');
                 const actual = textDocument.getText();
                 assert.equal(actual, expected);
+                await generator.appendScreenshot('box-box', 'A box drawn around the enclosed area');
         });
 
         test('Demo clearing an arrow', async function () {
-                await heading('Drawing an arrow');
-                await paragraph('TODO');
+                generator.appendSubheading('Drawing an arrow');
+                generator.appendParagraph('TODO');
         });
+
+        await generator.generate('## Features\n\n<!-- Generated from src/test/extension.test.ts -->', 2);
 });
